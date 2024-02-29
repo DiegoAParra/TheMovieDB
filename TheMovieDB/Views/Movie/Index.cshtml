@@ -16,7 +16,12 @@
                     <h6 class="card-title" style="max-height: 50px; overflow: hidden; text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.Title)</h6>
                     <p class="card-text" style="max-height: 80px; overflow: hidden; text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.Release_Date)</p>
                     <div class="mt-auto">
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @Class = "btn btn-info mb-2" })
+                        @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @Class = "btn btn-info mb-2" }) 
+                        <form action="@Url.Action("AddToCart")" method="post">
+                            @Html.Hidden("movieId", item.Id)
+                            @Html.Hidden("title", item.Title)
+                            <button type="submit" class="btn btn-success mb-2"> + </button>
+                        </form>
                     </div>
                 </div>
             </div>
