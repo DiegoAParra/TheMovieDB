@@ -17,10 +17,10 @@ namespace TheMovieDB.Models
         public string OriginalTitle { get; set; }
         public string Overview { get; set; }
         public double Popularity { get; set; }
-        public string PosterPath { get; set; }
+        public string Poster_Path { get; set; }
         public List<object> ProductionCompanies { get; set; }
         public List<object> ProductionCountries { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public string Release_Date { get; set; }
         public int Revenue { get; set; }
         public int Runtime { get; set; }
         public List<SpokenLanguage> SpokenLanguages { get; set; }

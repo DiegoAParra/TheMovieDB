@@ -1,7 +1,28 @@
 ﻿@model TheMovieDB.Models.Movie
 
 @{
-    ViewBag.Title = "Detalles";
+    ViewBag.Title = "Detalle";
 }
 
-<h2>Detalles</h2>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center">@Model.Title</h2>
+            <hr>
+            <div class="text-center">
+                <img src="@("https://image.tmdb.org/t/p/w500" + Model.Poster_Path)" alt="@Model.Title" class="img-fluid" style="max-height: 400px;">
+            </div>
+            <p class="mt-3"><strong>Overview:</strong> @Model.Overview</p>
+            <p><strong>Genres:</strong> @string.Join(", ", Model.Genres.Select(g => g.Name))</p>
+            <p><strong>Release Date:</strong> @Model.Release_Date</p>
+            <p><strong>Popularity:</strong> @Model.Popularity</p>
+            <p><strong>Vote Average:</strong> @Model.VoteAverage</p>
+            <p><strong>Vote Count:</strong> @Model.VoteCount</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Original Language:</strong> @Model.OriginalLanguage</p>
+            <p><strong>Tagline:</strong> @Model.Tagline</p>
+            <p><strong>Homepage:</strong> @Model.Homepage</p>
+            <p><strong>IMDb ID:</strong> @Model.ImdbId</p>
+        </div>
+    </div>
+</div>

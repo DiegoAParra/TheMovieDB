@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using TheMovieDB.Models;
 using TheMovieDB.Services;
 
 namespace TheMovieDB.Controllers
@@ -16,40 +13,34 @@ namespace TheMovieDB.Controllers
             _movieApiService = new MovieApiService();
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetMovieDetails(int movieId)
+        public async Task<ActionResult> Index()
         {
-            var movieDetails = await _movieApiService.GetMovieDetailsAsync(movieId);
+            var movies = await _movieApiService.GetMoviesFromApiAsync();
 
-            if (movieDetails != null)
+            foreach (var movie in movies)
             {
-                return View(movieDetails);
+                var movieDetails = await _movieApiService.GetMovieDetailsAsync(movie.Id);
+
+                movie.Title = movieDetails.Title;
+                movie.Poster_Path = movieDetails.Poster_Path;
+                movie.Release_Date = movieDetails.Release_Date;
+            }
+            return View(movies);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(int id)
+        {
+            var movie = await _movieApiService.GetMovieDetailsAsync(id);
+
+            if (movie != null)
+            {
+                return View(movie);
             }
             else
             {
                 return HttpNotFound();
             }
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Index()
-        {
-            try
-            {
-                var movieList = await _movieApiService.GetMovieListAsync();
-
-                var movieViewModels = movieList.Results.Select(m => new MovieListItem
-                {
-                    Id = m.Id,
-                    Adult = m.Adult
-                }).ToList();
-
-                return View("Index", movieViewModels);
-            }
-            catch (Exception ex)
-            {
-                return HttpNotFound();
-            }
-        }
+        }        
     }
 }

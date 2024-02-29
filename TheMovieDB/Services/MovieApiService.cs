@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TheMovieDB.Models;
@@ -16,6 +17,24 @@ namespace TheMovieDB.Services
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(BaseUrl);
+        }
+
+        public async Task<List<Movie>> GetMoviesFromApiAsync()
+        {
+            var apiUrl = $"{BaseUrl}/movie/changes?api_key={ApiKey}";
+
+            var response = await _httpClient.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var movieList = JsonConvert.DeserializeObject<MovieList>(jsonString);
+                return movieList.Results;
+            }
+            else
+            {
+                throw new Exception($"Error al obtener la lista de películas. Código de estado: {response.StatusCode}");
+            }
         }
 
         public async Task<Movie> GetMovieDetailsAsync(int movieId)
@@ -36,29 +55,6 @@ namespace TheMovieDB.Services
             }
         }
 
-        public async Task<MovieList> GetMovieListAsync()
-        {
-            try
-            {
-                var apiUrl = $"{BaseUrl}/movie/changes?api_key={ApiKey}";
-
-                var response = await _httpClient.GetAsync(apiUrl);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var movieList = JsonConvert.DeserializeObject<MovieList>(jsonString);
-                    return movieList;
-                }
-                else
-                {
-                    throw new Exception($"Error al obtener la lista de cambios de películas. Código de estado: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        
     }
 }
